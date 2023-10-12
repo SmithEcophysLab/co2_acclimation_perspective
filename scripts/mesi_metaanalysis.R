@@ -1,4 +1,5 @@
-# MESI data trends for CO2 x N interaction
+# MESI data trends for leaf/whole-plant responses to eCO2.
+# Note: code assumes that the path to this script is the root working directory
 
 ## Libraries
 library(tidyverse)
@@ -7,7 +8,9 @@ library(MAd)
 
 ## Load MESI dataset (repository cloned from 
 ## https://github.com/MESI-organization/mesi-db)
-df <- read.csv("../../mesi-db/data/mesi_main.csv") 
+df <- read.csv(
+  #"../../mesi-db/data/mesi_main.csv"
+  ) 
 
 ## See trait options
 unique(df$response)
@@ -17,11 +20,10 @@ vars_of_interest <- c("anet", "jmax", "leaf_n_mass",
                       "root_n_uptake", "root_nh4_uptake", "root_no3_uptake",
                       "wue", "lai", "lai_max", "gpp", "asat")
 
-## Assess treatment combinations. Searching for CO2 x N experiments
+## Assess treatment combinations. Searching for CO2 experiments only
 unique(df$treatment)
 
-## Filter MESI to include CO2 fertilization experiments with only traits 
-## of interest
+## Filter MESI to include CO2-only experiments with traits of interest
 df_filtered <- df %>%
   
   # Filter to include CO2-only experiments
@@ -81,7 +83,8 @@ vars_of_interest2 <- c("anet", "jmax", "leaf_n_mass", "gs",
 
 ## Pull analyse_meta.R script from Beni's repository to replicate approach used
 ## in Nwg meta-analysis
-source("../../lt_cn_review/R/analyse_meta.R")
+
+#source("../../lt_cn_review/R/analyse_meta.R")
 out  <- purrr::map(as.list(vars_of_interest2), 
                    ~analyse_meta(log_resp_agg %>% 
                                    rename(var = response),
